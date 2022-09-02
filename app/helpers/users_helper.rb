@@ -3,8 +3,6 @@ module UsersHelper
     header = CSV.open(csv_file, 'r', encoding:'iso-8859-1:utf-8') { |csv| csv.first }
     error_msg = "" 
 
-    Rails.logger.info("nice" + header.size.to_s)
-    Rails.logger.info("expected" + expected_header.to_s)
     if header.size != expected_header.size 
       error_msg = Messages::WRONG_COLUMN
     else

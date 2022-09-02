@@ -12,5 +12,9 @@ class UserService
       def getUserById(id)
         @user = UserRepository.getUserById(id)
       end
+
+      def findByEmail(email)
+        @user = UserRepository.findByEmail(email)
+      end
   end
 end

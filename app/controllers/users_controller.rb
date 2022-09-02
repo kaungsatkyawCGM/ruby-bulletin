@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  # require "#{Rails.root}/app/services/user_service"
+  # before_action :authorized_and_admin?
   
   def index
     @users = UserService.getAllUserList
@@ -24,10 +24,24 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit
+    @user = User.find(params[:id])
+  end
+
+  def update
+    @user = User.find(params[:id])
+
+    if @user.update(user_params)
+      redirect_to @user
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     @user = User.find(params[:id])
     @user.destroy
-    flash[:notice] = Messages::DELETED_SUCCESS_MSG
+    flash[:notice] = Messages::DELETED_SUCCESS
     redirect_to users_path, status: :see_other
   end
 
@@ -41,21 +55,42 @@ class UsersController < ApplicationController
 
   def import_csv
     if (params[:file].nil?)
-      redirect_to users_path, notice: Messages::REQUIRE_FILE
+      redirect_to users_path, alert: Messages::REQUIRE_FILE
     elsif !File.extname(params[:file]).eql?(".csv")
-      redirect_to users_path, notice: Messages::WRONG_FILE_TYPE
+      redirect_to users_path, alert: Messages::WRONG_FILE_TYPE
     else
       error_msg = UsersHelper.check_header(Constants::IMPORT_USER_CSV_HEADER, params[:file])
       if error_msg.present?
-        redirect_to users_path, notice: error_msg
+        redirect_to users_path, alert: error_msg
       else
-          User.import(params[:file], current_user.id)
-          redirect_to posts_path, notice: Messages::UPLOAD_SUCCESSFUL
+        import(params[:file], 1)
       end
     end
   end
 
   private
+
+  def import(file, current_user_id)
+    #like try catch
+    begin
+      #transition
+      ActiveRecord::Base.transaction do
+        CSV.foreach(file.path, headers: true, encoding:'iso-8859-1:utf-8', row_sep: :auto, header_converters: :symbol) do |row|
+          Rails.logger.info(row.to_hash[:role])
+          row = row.to_hash
+          row[:role] = (row[:role].downcase == "admin" ? "0" : "1")
+          @user = User.create(row.merge(created_by: 1, updated_by: 1))
+          unless @user.valid?
+            raise @user.errors.objects.first.full_message
+          end
+        end
+        redirect_to users_path, notice: Messages::UPLOAD_SUCCESS
+      end
+    rescue Exception => e
+      flash[:alert] = e.message
+      redirect_to users_path and return
+    end
+  end
 
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation, :role, :phone, :created_by, :updated_by)

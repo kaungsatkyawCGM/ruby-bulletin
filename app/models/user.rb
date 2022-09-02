@@ -7,7 +7,7 @@ class User < ApplicationRecord
                       uniqueness: { case_sensitive: false }
   validates :password, confirmation: true, presence: true,on: :create
   validates :phone, numericality: true, length: { minimum: 10, maximum: 15 }, allow_blank: true
-  validates :role, inclusion: { in: %w(1 0)}
+  validates :role, inclusion: { in: %w(1 0)}, on: :create_user
 
   has_secure_password
 
@@ -18,13 +18,6 @@ class User < ApplicationRecord
       all.each do |user|
         csv << [user.id, user.name, user.email, user.phone, user.role == "1" ? "Admin" : "User", user.created_at.strftime("%d/%m/%Y")]
       end
-    end
-  end
-
-  def self.import(file, current_user_id)
-    CSV.foreach(file.path, headers: true, encoding:'iso-8859-1:utf-8', row_sep: :auto, header_converters: :symbol) do |row|
-      row.map { |r| Rails.logger.info(r)}
-      # User.upsert(row.to_hash.merge(created_by: 1, updated_by: 1))
     end
   end
 
