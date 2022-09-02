@@ -29,7 +29,7 @@ function showLoading(timeout) {
   var id = '_loading_';
   $('body').append($('<div/>', {
     style: "position: fixed;width: 100%;height: 100%;text-align: center;display: flex;left: 0;justify-content: center;right: 0;" +
-    "bottom: 0;align-items: center;background: rgb(0 0 0 / 7%) url(loading.gif) 50% 50% no-repeat;z-index: 3000;text-align: center;",
+    "bottom: 0;align-items: center;background: rgb(0 0 0 / 7%) url(assets/loading.gif) 50% 50% no-repeat;z-index: 3000;text-align: center;",
     class: '__loading_screen',
     id: id
   }));

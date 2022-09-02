@@ -1,0 +1,32 @@
+<div class="profile-header mt-5">
+  <figure class="profile-header-cover mb-0">
+  </figure>
+  <div class="profile-header-info">
+    <div class="user-short-description pb-3">
+      <a
+					class="user-short-description-avatar user-avatar big d-flex justify-content-center align-items-center">
+        <div class="clip-block">
+          <div class="clip-each clip-solid"></div>
+        </div>
+        <!-- /clip-block -->
+      </a>
+      <p class="user-short-description-title"><%= @user.name %></p>
+      <p class="user-short-description-text"><%= @user.email %></p>
+    </div>
+  </div>
+</div>
+<nav class="section-navigation">
+  <div class="row h-100">
+    <a
+				href="${profilePosts}"
+				class="col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center">
+      POSTS
+    </a>
+    <%= link_to(user_path(@user), class: (current_page?(user_path(@user)) ? 'active col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center' : "col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center")) do%>
+      ABOUT
+    <% end %>
+    <%= link_to(edit_user_path(@user), class: (current_page?(edit_user_path(@user)) ? 'active col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center' : "col-4 col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center")) do%>
+      SETTING
+    <% end %>
+  </div>
+</nav>

@@ -1,0 +1,171 @@
+.profile-header-cover {
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	height: 300px;
+	width: 100%;
+	background: url(assets/profileBackground.png) center center/cover
+		no-repeat;
+}
+
+.profile-header .profile-header-info {
+	height: 126px;
+	position: relative;
+}
+
+.user-short-description {
+	padding-top: 52px;
+	position: relative;
+	background-color: #FFF;
+}
+
+.user-avatar.big {
+	width: 148px;
+	height: 164px;
+}
+
+.user-short-description .user-short-description-avatar {
+	margin-left: -93px;
+	position: absolute;
+	top: -150px;
+	left: 50%;
+	width: 186px;
+	height: 186px;
+	display: block;
+	-webkit-clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%)
+		!important;
+	clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%)
+		!important;
+	-webkit-clip-path: url(#hexagon-clip);
+	clip-path: url(#hexagon-clip);
+	-webkit-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+	background: white;
+}
+
+.clop-block {
+	display: block;
+	width: 148px;
+	height: 164px;
+	position: relative;
+	-webkit-clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%)
+		!important;
+	clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%)
+		!important;
+	-webkit-clip-path: url(#hexagon-clip);
+	clip-path: url(#hexagon-clip);
+	-webkit-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+	background: white;
+}
+
+.clip-each {
+	background: white;
+	display: block;
+	position: relative;
+	-webkit-clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%)
+		!important;
+	clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%)
+		!important;
+	-webkit-clip-path: url("#hexagon-clip");
+	clip-path: url("#hexagon-clip");
+	-webkit-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+	margin: 0 auto;
+}
+
+.clip-solid {
+	width: 148px;
+	height: 164px;
+	background-image: url(assets/profile.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-color: #ad6996;
+	background-blend-mode: hard-light;
+	-webkit-transition: all 2.5s linear;
+	transition: all 2.5s linear;
+}
+
+.user-short-description .user-short-description-text,
+	.user-short-description .user-short-description-title {
+	font-weight: 700;
+	text-align: center;
+	color: #3e3f5e;
+}
+
+.user-short-description .user-short-description-text {
+	margin-top: 10px;
+	color: #adafca !important;
+	font-size: .6875rem;
+	font-weight: 700;
+}
+
+.user-short-description .user-short-description-title {
+	font-size: 1.5rem;
+}
+
+.user-short-description.big .user-short-description-text {
+	font-size: .75rem;
+}
+
+.user-short-description {
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+}
+
+.section-navigation {
+	margin-top: 25px;
+	height: 80px;
+	padding: 0 43px;
+	border-radius: 12px;
+	background-color: #fff;
+	box-shadow: 0 0 40px 0 rgb(94 92 154/ 6%);
+	position: relative;
+}
+
+.section-menu-item{
+	color: #adafca;
+}
+
+.section-menu-item:first-child:after, .section-menu-item:nth-child(2):after {
+    content: "";
+    width: 1px;
+    height: 20px;
+    background-color: #eaeaf5;
+    position: absolute;
+    top: 30px;
+    right: 0;
+}
+
+.section-menu-item:last-child:after {
+	content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: 30px;
+    right: 0;
+}
+
+.section-menu-item.active, .section-menu-item:hover{
+	transition: 0.1s;
+	color: #3e3f5e !important;
+	border-bottom: 4px solid #23d2e2;
+}
+
+/* detail */
+.information-line {
+	margin-bottom: 14px;
+}
+
+.information-line-title {
+	flex-shrink: 0;
+	width: 80px;
+  font-weight: bold !important;
+	color: #8f91ac;
+}
+
+.information-line .information-line-text, .information-line .information-line-title
+	{
+	font-size: .875rem;
+	font-weight: 500;
+	line-height: 1.4285714286em;
+}

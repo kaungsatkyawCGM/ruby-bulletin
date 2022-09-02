@@ -1,3 +1,28 @@
-<h1><%= @user.name %></h1>
-
-<p><%= @user.email %></p>
+<div class="container mt-90">
+  <%= render 'users/include/profile' %>
+  <section class="p-5 mt-3 rounded-section">
+    <p class="section-title">
+      Personal Info
+    </p>
+    <div class="pt-4">
+      <div class="list">
+        <div class="information-line d-flex b-text">
+          <p class="information-line-title">Email</p>
+          <p class="information-line-text"><%= @user.email %></p>
+        </div>
+        <div class="information-line d-flex">
+          <p class="information-line-title">Phone</p>
+          <p class="information-line-text"><%= @user.phone %></p>
+        </div>
+        <div class="information-line d-flex">
+          <p class="information-line-title">Role</p>
+          <p class="information-line-text"><%= @user.role == "1" ? "Administrator" : "Normal User" %></p>
+        </div>
+        <div class="information-line d-flex mb-0">
+          <p class="information-line-title mb-0">Join Date</p>
+          <p class="information-line-text mb-0"><%= @user.created_at.strftime("%d/%m/%Y") %></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
