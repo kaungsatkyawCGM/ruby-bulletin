@@ -1,8 +1,7 @@
 <div class="container mt-90">
   <%= render 'users/include/profile' %>
 	<section class="p-5 mt-3 rounded-section">
-    <%= form_with model: @user, url: updated_user_path(@user), method: :post do |form| %>
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    <%= form_with model: @user_form, url: updated_user_path(@user_form), method: :post do |form| %>
 			<div class="d-flex justify-content-center">
 				<div>
 					<div class="d-flex justify-content-between align-items-center">
@@ -16,8 +15,8 @@
 							<div class="form-input">
                 <%= form.label "Username" %>
                 <%= form.text_field :name %>
-                <% if @user.errors[:name].any? %>
-                  <span class="text-danger"><%= @user.where(:name).first.full_message %></span>
+                <% if @user_form.errors[:name].any? %>
+                  <span class="text-danger"><%= @user_form.errors[:name][0] %></span>
                 <% end %>
 							</div>
 						</div>
@@ -27,8 +26,8 @@
 							<div class="form-input">
 								<%= form.label "Email" %>
                 <%= form.text_field :email %>
-								<% if @user.errors[:email].any? %>
-                  <span class="text-danger"><%= @user.where(:email).first.full_message %></span>
+								<% if @user_form.errors[:email].any? %>
+                  <span class="text-danger"><%= @user_form.errors[:email][0] %></span>
                 <% end %>
 							</div>
 						</div>
@@ -36,8 +35,8 @@
 							<div class="form-input">
                 <%= form.label "Phone" %>
                 <%= form.text_field :phone %>
-                <% if @user.errors[:phone].any? %>
-                  <span class="text-danger"><%= @user.where(:phone).first.full_message %></span>
+                <% if @user_form.errors[:phone].any? %>
+                  <span class="text-danger"><%= @user_form.errors[:phone][0] %></span>
                 <% end %>
 							</div>
 						</div>
@@ -52,7 +51,7 @@
 						</div>
 						<div class="form-item">
 							<div class="checkbox-wrap">
-								<%= form.radio_button :role, "1", id: "admin"%>
+								<%= form.radio_button :role, "1", id: "user"%>
 								<div class="checkbox-box round"></div>
 								<label for="user">Administrator</label>
 							</div>

@@ -8,7 +8,6 @@
         <div class="clip-block">
           <div class="clip-each clip-solid"></div>
         </div>
-        <!-- /clip-block -->
       </a>
       <p class="user-short-description-title"><%= @user.name %></p>
       <p class="user-short-description-text"><%= @user.email %></p>
@@ -17,16 +16,20 @@
 </div>
 <nav class="section-navigation">
   <div class="row h-100">
-    <a
-				href="${profilePosts}"
-				class="col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center">
+    <% about_active = (current_page?(user_path(@user)) ? "active" : "") %>
+    <% post_active = (controller.controller_name == "posts" && (controller.action_name == "profile_post" || controller.action_name == "create") ? "active" : "") %>
+    <% setting_active = (controller.controller_name == "users" && (controller.action_name == "edit" || controller.action_name == "update") ? "active" : "") %>
+    <% column_class = (current_user_obj[:id] == @user.id || current_user_obj[:role] == "1" ? "col-4" : "col-6") %>
+    <%= link_to(user_posts_path(@user), class: "#{post_active} #{column_class} section-menu-item text-center position-relative d-flex align-items-center justify-content-center") do%>
       POSTS
-    </a>
-    <%= link_to(user_path(@user), class: (current_page?(user_path(@user)) ? 'active col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center' : "col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center")) do%>
+    <% end %>
+    <%= link_to(user_path(@user), class: "#{about_active} #{column_class} section-menu-item text-center position-relative d-flex align-items-center justify-content-center") do %>
       ABOUT
     <% end %>
-    <%= link_to(edit_user_path(@user), class: (current_page?(edit_user_path(@user)) ? 'active col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center' : "col-4 col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center")) do%>
-      SETTING
+    <% if current_user_obj[:id] == @user.id || current_user_obj[:role] == "1" %>
+      <%= link_to(edit_user_path(@user), class: "#{setting_active} col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center") do%>
+        SETTING
+      <% end %>
     <% end %>
   </div>
 </nav>

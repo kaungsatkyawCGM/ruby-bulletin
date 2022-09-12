@@ -12,7 +12,7 @@
         </div>
         <div class="information-line d-flex">
           <p class="information-line-title">Phone</p>
-          <p class="information-line-text"><%= @user.phone %></p>
+          <p class="information-line-text"><%= @user.phone.nil? ? "-" : @user.phone %></p>
         </div>
         <div class="information-line d-flex">
           <p class="information-line-title">Role</p>

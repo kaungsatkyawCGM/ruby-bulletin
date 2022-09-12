@@ -1,0 +1,21 @@
+.post-container {
+	width: 446.39px;
+}
+
+.p-90 {
+	padding: 90px;
+}
+
+.clear-image-btn {
+	position: absolute;
+	right: 20px;
+	top: 20px;
+}
+
+.clear-image-btn .fa-circle-xmark {
+	font-size: 20px;
+}
+
+.post-image {
+	position: relative;
+}

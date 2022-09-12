@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   def current_user_obj
-    @current_user ||= User.find(session[:user_id])
+    @current_user ||= UserService.getUserById(session[:user_id])
   end
 
   def logged_in?
@@ -12,20 +12,22 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in_as_admin?
-    @user = User.where("users.id = ? and users.role = '1'", session[:user_id])
-    Rails.logger.info(session[:user_id])
+    @user = UserService.getAdminUser(session[:user_id])
 
     if @user.blank?
-      return false
+      false
     else
-      return true
+      true
     end
-
   end
 
   def authorized_and_admin?
     redirect_to login_path unless logged_in_as_admin?
   end
 
-  helper_method :current_user, :logged_in?, :authorized_and_admin?
+  def already_login?
+    redirect_to login_path unless logged_in?
+  end
+
+  helper_method :current_user_obj, :logged_in?, :authorized_and_admin?, :already_login?
 end

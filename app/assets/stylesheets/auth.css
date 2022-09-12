@@ -1,11 +1,11 @@
 .auth-container {
-	min-height: 100vh;
+  min-height: 100vh;
 }
 
 body {
-	background: #FFF !important;
+  background: #FFF !important;
 }
 
 .form-item .form-input {
-	margin-top: 30px;
+  margin-top: 30px;
 }

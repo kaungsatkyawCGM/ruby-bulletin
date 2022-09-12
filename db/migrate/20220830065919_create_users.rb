@@ -6,8 +6,8 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.text "password_digest", null: false
       t.string :role, limit: 1
       t.string :phone
-      t.integer :created_by, null: false
-      t.bigint :updated_by, null: false
+      t.integer :created_by, null: true
+      t.bigint :updated_by, null: true
       t.integer :deleted_by
       t.datetime :deleted_at
       t.timestamps
