@@ -1,36 +1,35 @@
 <%= stylesheet_link_tag 'fixed_frame' %>
 <%= stylesheet_link_tag 'setting' %>
-
 <div class="container fixed-container">
-	<div class="row auth-container mb-5 align-items-center">
-		<div class="col-md-6 h-100 d-flex justify-content-center">
+  <div class="row auth-container mb-5 align-items-center">
+    <div class="col-md-6 h-100 d-flex justify-content-center">
       <%= image_tag "undraw_wait_in_line_o2aq.svg", class: "w-100" %>
-		</div>
-		<div class="col-md-6 h-100 p-5">
+    </div>
+    <div class="col-md-6 h-100 p-5">
       <%= form_with model: @user, url: create_user_path(@user), method: :post, class: "main-form" do |form| %>
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-				<div class="form-item w-100">
-					<div class="form-input">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        <div class="form-item w-100">
+          <div class="form-input">
             <%= form.label "Username" %>
             <%= form.text_field :name %>
             <% if @user.errors[:name].any? %>
               <span class="text-danger"><%= @user.errors[:name][0] %></span>
             <% end %>
-					</div>
-					<div class="form-input">
-						<%= form.label :email %>
+          </div>
+          <div class="form-input">
+            <%= form.label :email %>
             <%= form.text_field :email %>
             <% if @user.errors[:email].any? %>
               <span class="text-danger"><%= @user.errors[:email][0] %></span>
             <% end %>
-					</div>
-					<div class="form-input">
-						<%= form.label :password %>
+          </div>
+          <div class="form-input">
+            <%= form.label :password %>
             <%= form.password_field :password %>
             <% if @user.errors[:password].any? %>
               <span class="text-danger"><%= @user.errors[:password][0] %></span>
             <% end %>
-					</div>
+          </div>
           <div class="form-input">
             <%= form.label :phone %>
             <%= form.text_field :phone %>
@@ -38,33 +37,33 @@
               <span class="text-danger"><%= @user.errors[:phone][0] %></span>
             <% end %>
           </div>
-					<div class="form-row d-flex w-100 mt-4">
-						<div class="form-item">
-							<div class="checkbox-wrap">
-								<%= form.radio_button :role, "0", checked: "checked", id: "user"%>
-								<div class="checkbox-box round"></div>
-								<label for="user">Regular user</label>
-							</div>
-						</div>
-						<div class="form-item">
-							<div class="checkbox-wrap">
+          <div class="form-row d-flex w-100 mt-4">
+            <div class="form-item">
+              <div class="checkbox-wrap">
+                <%= form.radio_button :role, "0", checked: "checked", id: "user"%>
+                <div class="checkbox-box round"></div>
+                <label for="user">Regular user</label>
+              </div>
+            </div>
+            <div class="form-item">
+              <div class="checkbox-wrap">
                 <%= form.radio_button :role, "1", id: "admin"%>
-								<div class="checkbox-box round"></div>
-								<label for="admin">Administrator</label>
-							</div>
-						</div>
-					</div>
+                <div class="checkbox-box round"></div>
+                <label for="admin">Administrator</label>
+              </div>
+            </div>
+          </div>
           <% if @user.errors[:role].any? %>
             <span class="text-danger"><%= @user.errors[:role][0] %></span>
           <% end %>
-					<div class="form-input d-flex button-double justify-content-end">
+          <div class="form-input d-flex button-double justify-content-end">
             <%= link_to(@user ,class: "btn cancel") do %>
               Cancel
             <% end %>
             <%= form.submit "Create", :class => "btn post" %>
-					</div>
-				</div>
+          </div>
+        </div>
       <% end %>
-		</div>
-	</div>
+    </div>
+  </div>
 </div>

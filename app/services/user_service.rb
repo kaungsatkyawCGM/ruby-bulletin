@@ -1,7 +1,18 @@
 class UserService
   class << self
-    def getAllUserList(user_id)
-      @users = UserRepository.getAllUserList(user_id)
+    def getAllUserList(user_id, params)
+      unless params.nil?
+        order_column_index = params[:order]['0'][:column]
+        order_column = params[:columns][order_column_index][:data]
+        order = params[:order]['0'][:dir] ? params[:order]['0'][:dir] : 'asc'
+
+        order_column << ' ' + order.upcase unless order == 'asc'
+      else
+        order_column = nil
+        order = nil
+      end
+
+      @users = UserRepository.getAllUserList(user_id, params, order_column)
     end
 
     def getUserById(id)

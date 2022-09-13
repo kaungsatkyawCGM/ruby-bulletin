@@ -1,64 +1,66 @@
 <div class="container mt-90">
   <%= render 'users/include/profile' %>
-	<section class="p-5 mt-3 rounded-section">
+  <section class="p-5 mt-3 rounded-section">
     <%= form_with model: @user_form, url: updated_user_path(@user_form), method: :post do |form| %>
-			<div class="d-flex justify-content-center">
-				<div>
-					<div class="d-flex justify-content-between align-items-center">
-						<p class="section-title text-center mb-0">
-							Change Personal Info
-						</p>
-						<button type="submit" class="btn-update">Update</button>
-					</div>
+      <div class="d-flex justify-content-center">
+        <div>
+          <div class="d-flex justify-content-between align-items-center">
+            <p class="section-title text-center mb-0">
+              Change Personal Info
+            </p>
+            <button type="submit" class="btn-update">Update</button>
+          </div>
           <div class="form-row d-flex w-100">
-						<div class="form-item w-100">
-							<div class="form-input">
+            <div class="form-item w-100">
+              <div class="form-input">
                 <%= form.label "Username" %>
                 <%= form.text_field :name %>
                 <% if @user_form.errors[:name].any? %>
                   <span class="text-danger"><%= @user_form.errors[:name][0] %></span>
                 <% end %>
-							</div>
-						</div>
-					</div>
-					<div class="form-row d-flex w-100">
-						<div class="form-item">
-							<div class="form-input">
-								<%= form.label "Email" %>
+              </div>
+            </div>
+          </div>
+          <div class="form-row d-flex w-100">
+            <div class="form-item">
+              <div class="form-input">
+                <%= form.label "Email" %>
                 <%= form.text_field :email %>
-								<% if @user_form.errors[:email].any? %>
+                <% if @user_form.errors[:email].any? %>
                   <span class="text-danger"><%= @user_form.errors[:email][0] %></span>
                 <% end %>
-							</div>
-						</div>
+              </div>
+            </div>
             <div class="form-item">
-							<div class="form-input">
+              <div class="form-input">
                 <%= form.label "Phone" %>
                 <%= form.text_field :phone %>
                 <% if @user_form.errors[:phone].any? %>
                   <span class="text-danger"><%= @user_form.errors[:phone][0] %></span>
                 <% end %>
-							</div>
-						</div>
-					</div>
-					<div class="form-row d-flex w-100 mt-4">
-						<div class="form-item">
-							<div class="checkbox-wrap">
-                <%= form.radio_button :role, "0", checked: "checked", id: "admin"%>
-								<div class="checkbox-box round"></div>
-								<label for="admin">Regular user</label>
-							</div>
-						</div>
-						<div class="form-item">
-							<div class="checkbox-wrap">
-								<%= form.radio_button :role, "1", id: "user"%>
-								<div class="checkbox-box round"></div>
-								<label for="user">Administrator</label>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+              </div>
+            </div>
+          </div>
+          <% if current_user_obj[:role] == Constants::ADMIN_ROLE %>
+            <div class="form-row d-flex w-100 mt-4">
+              <div class="form-item">
+                <div class="checkbox-wrap">
+                  <%= form.radio_button :role, "0", checked: "checked", id: "admin"%>
+                  <div class="checkbox-box round"></div>
+                  <label for="admin">Regular user</label>
+                </div>
+              </div>
+              <div class="form-item">
+                <div class="checkbox-wrap">
+                  <%= form.radio_button :role, "1", id: "user"%>
+                  <div class="checkbox-box round"></div>
+                  <label for="user">Administrator</label>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
     <% end %>
-	</section>
+  </section>
 </div>

@@ -5,11 +5,13 @@ class ChangePasswordForm
 
   validates_confirmation_of :password
 
-  validates :old_password, :password, :password_confirmation, presence: { message: Validations::REQUIRED },
-                                                              on: :change_password
-  validate :verify_old_password, on: :change_password
-
   validates :password, :password_confirmation, presence: { message: Validations::REQUIRED }, on: :reset_password
+
+  validates :old_password, :password, :password_confirmation, presence: { message: Validations::REQUIRED }, on: :change_password
+
+  validates :password, length: { minimum: 8, maximum: 20, too_short: Validations::MINIMUN, too_long: Validations::MAXIMUN }
+
+  validate :verify_old_password, on: :change_password
 
   attr_accessor :old_password, :password, :password_confirmation
 

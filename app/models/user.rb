@@ -8,8 +8,8 @@ class User < ApplicationRecord
   validates :email, presence: { message: Validations::REQUIRED }, length: { maximum: 255, too_long: Validations::MAXIMUN },
                     format: { with: Constants::VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
-  validates :password, confirmation: true, presence: { message: Validations::REQUIRED }, on: :create
-  validates :phone, numericality: true, length: { minimum: 10, maximum: 15 }, allow_blank: true
+  validates :password, confirmation: true, presence: { message: Validations::REQUIRED }, length: { minimum: 8, maximum: 20, too_short: Validations::MINIMUN, too_long: Validations::MAXIMUN }, on: :create
+  validates :phone, numericality: { message: Validations::VALID_INTEGER }, length: { minimum: 10, maximum: 15, too_short: Validations::MINIMUN, too_long: Validations::MAXIMUN }, allow_blank: true
   validates :role, inclusion: { in: %w[1 0] }
 
   has_secure_password

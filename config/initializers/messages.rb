@@ -11,6 +11,7 @@ module Messages
   CREATED_SUCCESS = 'User account has been created'
   DELETED_SUCCESS = 'User account has been deleted'
   UPLOAD_SUCCESS = 'Users has been saved'
+  UPDATED_SUCCESS = 'Updated successfully'
   CHANGE_PASSWORD_SUCCESS = 'Your Password has been changed'
 
   # post message

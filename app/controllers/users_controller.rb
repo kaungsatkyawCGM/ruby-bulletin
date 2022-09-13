@@ -2,17 +2,27 @@ class UsersController < ApplicationController
   before_action :authorized_and_admin?, except: %i[change_password action_change_password show edit update]
   before_action :already_login?, only: %i[change_password action_change_password]
   def index
-    @users = UserService.getAllUserList(current_user_obj[:id])
+    @users = UserService.getAllUserList(current_user_obj[:id], nil)
   end
 
   def user_list
-    @users = UserService.getAllUserList(current_user_obj[:id])
+    @users = UserService.getAllUserList(current_user_obj[:id], params)
 
-    render json: {users: @users}
+    @slice_users = @users.slice(params[:start].to_i, params[:length].to_i)
+
+    render json: {
+      data: {
+        users: @slice_users
+      },
+      draw: (params['draw'].to_i || 0) + 1,
+      recordsTotal: @users.count,
+      recordsFiltered: @users.count,
+      ids: @users
+    }
   end
 
   def show
-    @user = UserService.getUserById(params[:id])
+    @user = UserService.getUserById(params[:id]) or not_found
   end
 
   def new
@@ -35,16 +45,22 @@ class UsersController < ApplicationController
       redirect_to user_path(params[:id]) and return
     end
 
-    @user = UserService.getUserById(params[:id])
+    @user = UserService.getUserById(params[:id]) or not_found
     @user_form = @user
   end
 
   def update
     @user = UserService.getUserById(params[:id])
-    @user_form = UserService.getUserById(params[:id])
-    @is_updated = UserService.update(@user_form, current_user_obj.id, user_params)
+    @user_form = UserService.getUserById(params[:id]) or not_found
+
+    @is_updated = if current_user_obj[:role] == Constants::ADMIN_ROLE
+                    UserService.update(@user_form, current_user_obj.id, user_params)
+                  else
+                    UserService.update(@user_form, current_user_obj.id, user_params.except(:role))
+                  end
+
     if @is_updated
-      redirect_to @user
+      redirect_to @user, notice: Messages::UPDATED_SUCCESS
     else
       render :edit, status: :unprocessable_entity
     end
@@ -58,7 +74,7 @@ class UsersController < ApplicationController
   end
 
   def download_csv
-    @users = UserService.getAllUserList(current_user_obj[:id])
+    @users = UserService.getAllUserList(current_user_obj[:id], nil)
     respond_to do |format|
       format.html
       format.csv { send_data @users.to_csv, filename: 'user_list.csv' }

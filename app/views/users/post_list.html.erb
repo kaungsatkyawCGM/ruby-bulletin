@@ -70,7 +70,7 @@
         <div class="quick-post-header search-box d-flex align-items-center">
           <div class="option-items h-100 w-100">
             <%= form_with model: @searchForm, url: user_posts_path, method: :get, class: "form-inline" do |form| %>
-              <%= form.text_field :search, class: "title-box form-control h-100", placeholder: "Search with post title" %>
+              <%= form.text_field :search, class: "title-box form-control h-100", placeholder: "Search with post title", value: "#{params[:search]}" %>
               <div class="search-icon">
                 <button type="submit" class="border-0 w-100 h-100 bg-transparent">
                   <i class="fa-solid fa-magnifying-glass"></i>
@@ -80,74 +80,78 @@
           </div>
         </div>
       </div>
-      <% @posts.each do |post| %>
-        <div class="widget-box">
-          <div class="widget-box-settings">
-            <div class="post-settings-wrap position-relative">
-              <i class="fa-solid fa-ellipsis dropdown-toggle" role="button"
-                id="dropdownMenuLink" data-bs-toggle="dropdown"
-                aria-expanded="false"></i>
-              <div class="dropdown-menu dropdown-action-list"
-                aria-labelledby="dropdownMenuLink">
-                <p>
-                  <%= link_to "Edit Post", edit_post_path(post.post_id)%>
-                </p>
-                <p id="delete-button">
-                  <a id="deletePost" data-bs-toggle="modal" data-bs-target="#deletePostModal<%= post.post_id %>">
-                    Delete Post
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="widget-box-status">
-            <div class="widget-box-status-content">
-              <div class="user-info pe-4">
-                <%= link_to(user_path(post.user), class: "profile") do %>
-                  <div class="profile-image-frame"></div>
-                <% end %>
-                <%= link_to(user_path(post.user)) do %>
-                  <p class="username m-0">
-                    <b><%= post.user.name %></b>
+      <% if @posts.empty? %>
+        <h6>No Post To Display</h6>
+      <% else %>
+        <% @posts.each do |post| %>
+          <div class="widget-box">
+            <div class="widget-box-settings">
+              <div class="post-settings-wrap position-relative">
+                <i class="fa-solid fa-ellipsis dropdown-toggle" role="button"
+                  id="dropdownMenuLink" data-bs-toggle="dropdown"
+                  aria-expanded="false"></i>
+                <div class="dropdown-menu dropdown-action-list"
+                  aria-labelledby="dropdownMenuLink">
+                  <p>
+                    <%= link_to "Edit Post", edit_post_path(post.post_id)%>
                   </p>
-                <% end %>
-                <p class="mt-2 mb-0 upload-time"><%= post.created_at.strftime("%Y/%m/%d %I:%M:%S %p " ) %></p>
-              </div>
-              <div class="widget-box-content-text mt-3">
-                <p><%= post.title %></p>
-                <p><%= post.description %></p>
-              </div>
-              <% if post.image_data.attached? %>
-                <div class="w-100 mt-3">
-                  <div class="image-frame">
-                    <img src="<%= (url_for(post.image_data)) %>"
-											class="w-100 h-100">
-                  </div>
+                  <p id="delete-button">
+                    <a id="deletePost" data-bs-toggle="modal" data-bs-target="#deletePostModal<%= post.post_id %>">
+                      Delete Post
+                    </a>
+                  </p>
                 </div>
-              <% end %>
-            </div>
-          </div>
-        </div>
-        <!-- Modal -->
-        <div class="modal fade" id="deletePostModal<%= post.post_id %>" tabindex="-1"
-					aria-labelledby="deletePostModal" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-									aria-label="Close"></button>
               </div>
-              <div class="modal-body">Are You Sure To Delete?</div>
-              <div class="modal-footer button-double">
-                <button type="button" class="btn cancel" data-bs-dismiss="modal">Close</button>
-                <%= form_with model: @searchForm, url: delete_post_path(@user.id, post.post_id), method: :delete do |form| %>
-                  <button type="submit" class="btn btn-danger" id="delete-post-btn">Delete</button>
+            </div>
+            <div class="widget-box-status">
+              <div class="widget-box-status-content">
+                <div class="user-info pe-4">
+                  <%= link_to(user_path(post.user), class: "profile") do %>
+                    <div class="profile-image-frame"></div>
+                  <% end %>
+                  <%= link_to(user_path(post.user)) do %>
+                    <p class="username m-0">
+                      <b><%= post.user.name %></b>
+                    </p>
+                  <% end %>
+                  <p class="mt-2 mb-0 upload-time"><%= post.created_at.strftime("%Y/%m/%d %I:%M:%S %p " ) %></p>
+                </div>
+                <div class="widget-box-content-text mt-3">
+                  <p><%= post.title %></p>
+                  <p><%= post.description %></p>
+                </div>
+                <% if post.image_data.attached? %>
+                  <div class="w-100 mt-3">
+                    <div class="image-frame">
+                      <img src="<%= (url_for(post.image_data)) %>"
+                        class="w-100 h-100">
+                    </div>
+                  </div>
                 <% end %>
               </div>
             </div>
           </div>
-        </div>
+          <!-- Modal -->
+          <div class="modal fade" id="deletePostModal<%= post.post_id %>" tabindex="-1"
+            aria-labelledby="deletePostModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Are You Sure To Delete?</div>
+                <div class="modal-footer button-double">
+                  <button type="button" class="btn cancel" data-bs-dismiss="modal">Close</button>
+                  <%= form_with model: @searchForm, url: delete_post_path(@user.id, post.post_id), method: :delete do |form| %>
+                    <button type="submit" class="btn btn-danger" id="delete-post-btn">Delete</button>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>

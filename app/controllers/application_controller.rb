@@ -29,5 +29,9 @@ class ApplicationController < ActionController::Base
     redirect_to login_path unless logged_in?
   end
 
-  helper_method :current_user_obj, :logged_in?, :authorized_and_admin?, :already_login?
+  def not_found
+    raise ActionController::RoutingError.new('Not Found')
+  end
+
+  helper_method :current_user_obj, :logged_in?, :authorized_and_admin?, :already_login?, :not_found
 end

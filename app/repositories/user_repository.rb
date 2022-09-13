@@ -1,7 +1,11 @@
 class UserRepository
   class << self
-    def getAllUserList(user_id)
-      @users = User.where(deleted_at: nil).where.not(id: user_id)
+    def getAllUserList(user_id, params, order_column)
+      if params.nil?
+        @users = User.where(deleted_at: nil).where.not(id: user_id)
+      else
+        @users = User.where(deleted_at: nil).where.not(id: user_id).where('name LIKE ? OR email LIKE ?', "%#{params[:search][:value]}%", "%#{params[:search][:value]}%").order(order_column)
+      end
     end
 
     def getUserById(id)

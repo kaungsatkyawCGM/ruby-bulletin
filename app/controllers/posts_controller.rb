@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   def index
     @post = PostForm.new(Post.new)
-    @users = UserService.getAllUserList(current_user_obj.present? ? current_user_obj[:id] : nil)
+    @users = UserService.getAllUserList((current_user_obj.present? ? current_user_obj[:id] : nil), nil)
     @posts = PostService.getAllPosts(false, params[:search], params[:filter], nil)
   end
 
@@ -73,10 +73,11 @@ class PostsController < ApplicationController
       @user = UserService.getUserById(params[:id])
       all_flag = true if params[:id].to_i == session[:user_id]
 
-      @posts = PostService.getAllPosts(all_flag, nil, params[:id])
+      @posts = PostService.getAllPosts(all_flag, nil, params[:id], nil)
       render 'users/post_list'
     else
-      @posts = PostService.getAllPosts(all_flag, nil, params[:id])
+      @users = UserService.getAllUserList((current_user_obj.present? ? current_user_obj[:id] : nil), nil)
+      @posts = PostService.getAllPosts(all_flag, nil, nil, nil)
       render 'posts/index'
     end
   end
