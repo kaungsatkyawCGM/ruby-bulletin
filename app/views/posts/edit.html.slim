@@ -1,0 +1,38 @@
+- content_for :css do
+  = stylesheet_link_tag 'edit_post'
+.container.fixed-container.p-90.d-flex.justify-content-center.align-items-center
+  div
+    .post-container
+      .quick-post
+        = form_with model: @form, url: update_post_path(params[:post_id]), method: :post do |form|
+          .quick-post-header.d-flex.align-items-center
+            .option-items.h-100.w-100
+              .user-info.add-post-div.pt-0.m-3.d-flex.justify-content-between.align-items-center
+                a.profile href="#"
+                  .profile-image-frame
+                p.username.m-0
+                  b
+                    = current_user_obj.name
+                = form.select(:public_flag, [["Public", true], ["Private", false]], {}, {class: 'form-select' })
+              = form.text_field :title, placeholder: "Enter your title", class: "title-box form-control h-100", id: "title-input"
+              - if @form.errors[:title].any?
+                span.text-danger
+                  = @form.errors[:title][0]
+          .form-item.w-100
+            .form-textarea.position-relative.w-100.bg-white
+              = form.text_area :description, class: "form-control", placeholder: "What Are You Thinking!", id: "description-input"
+              - if @form.errors[:description].any?
+                span.text-danger
+                  = @form.errors[:description][0]
+          .post-image class=("d-none" unless (@form.image_data.attached? rescue $!.class != NoMethodError))
+            img#image_displayer src=((url_for(@form.image_data)) if @form.image_data.attached? rescue $!.class != NoMethodError)
+            a.clear-image-btn
+              i.fa-solid.fa-circle-xmark
+            = form.hidden_field :clear, id: "clear"
+            = form.file_field :image_data, direct_upload: true, id: "image_input", class: "d-none", accept: "image/*"
+          .quick-post-footer
+            label.quick-post-footer-actions for="image_input"
+              i.fa-solid.fa-camera-retro.me-2
+            .quick-post-footer-actions
+              = link_to "Cancel", user_posts_path(current_user_obj), class: "btn cancel"
+              button type="submit" class="btn post" Post

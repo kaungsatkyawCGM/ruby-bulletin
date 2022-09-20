@@ -69,7 +69,7 @@ var table = $('#example').on('preXhr.dt', function(e, settings, data) {
         disabled_cols: [4]
     }),
     ajax: {
-        url: 'users/list',
+        url: '/users/list',
         method: "post",
         data: {
             authenticity_token: $('[name="csrf-token"]')[0].content
@@ -105,8 +105,9 @@ $('#example_filter').keypress(function(event) {
 
 table.on('click', 'td', function() {
     var cell = table.cell(this).index();
+    var userId = table.row(cell.row).data().id;
     if (cell.column != 4) {
-        var detailUrl = $(this).parent().data('info-url');
+        var detailUrl = '/users/' + userId;
         location.href = detailUrl;
     } else {
         $("#deleteModal").modal('show');

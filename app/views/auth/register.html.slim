@@ -1,0 +1,36 @@
+= stylesheet_link_tag 'fixed_frame'
+= stylesheet_link_tag 'setting'
+.container.fixed-container
+  .row.auth-container.mb-5.align-items-center
+    .col-md-6.h-100.d-flex.justify-content-center
+      = image_tag "undraw_wait_in_line_o2aq.svg", class: "w-100"
+    .col-md-6.h-100.p-5
+      = form_with model: @form, url: action_register_path(@user), method: :post, class: "main-form" do |form|
+        .form-item.w-100
+          .form-input
+            = form.label "Username"
+            = form.text_field :name
+            - if @form.errors[:name].any?
+              span.text-danger
+                = @form.errors[:name][0]
+          .form-input
+            = form.label :email
+            = form.text_field :email
+            - if @form.errors[:email].any?
+              span.text-danger
+                = @form.errors[:email][0]
+          .form-input
+            = form.label :password
+            = form.password_field :password
+            - if @form.errors[:password].any?
+              span.text-danger
+                = @form.errors[:password][0]
+          .form-input
+            = form.label :phone
+            = form.text_field :phone
+            - if @form.errors[:phone].any?
+              span.text-danger
+                = @form.errors[:phone][0]
+          .form-input.d-flex.button-double.justify-content-end
+            = link_to "Cancel", login_path, class: "btn cancel"
+            = form.submit "Register", :class => "btn post"

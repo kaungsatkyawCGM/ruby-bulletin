@@ -1,0 +1,16 @@
+class ChangeEncoding < ActiveRecord::Migration[7.0]
+  def change
+    config = Rails.configuration.database_configuration
+    db_name = 'bulletinboardruby'
+    collate = 'utf8mb4_polish_ci'
+    char_set = 'utf8mb4'
+    row_format = 'DYNAMIC'
+ 
+    execute("ALTER DATABASE #{db_name} CHARACTER SET #{char_set} COLLATE #{collate};")
+ 
+    ActiveRecord::Base.connection.tables.each do |table|
+      execute("ALTER TABLE #{table} ROW_FORMAT=#{row_format};")
+      execute("ALTER TABLE #{table} CONVERT TO CHARACTER SET #{char_set} COLLATE #{collate};")
+    end
+  end
+end

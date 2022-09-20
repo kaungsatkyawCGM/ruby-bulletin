@@ -1,0 +1,23 @@
+.container.mt-90
+  == render 'users/include/profile'
+  section.p-5.mt-3.rounded-section
+    p.section-title
+      | Personal Info
+    .pt-4
+      .list
+        .information-line.d-flex.b-text
+          p.information-line-title Email
+          p.information-line-text
+            = @form.email
+        .information-line.d-flex
+          p.information-line-title Phone
+          p.information-line-text
+            = @form.phone.nil? ? "-" : @form.phone
+        .information-line.d-flex
+          p.information-line-title Role
+          p.information-line-text
+            = @form.role == "1" ? "Administrator" : "Normal User"
+        .information-line.d-flex.mb-0
+          p.information-line-title.mb-0 Join Date
+          p.information-line-text.mb-0
+            = @form.created_at.strftime("%d/%m/%Y")

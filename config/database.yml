@@ -14,13 +14,19 @@ default: &default
 
 development:
   <<: *default
-  database: bulletinboard-ruby
+  database: bulletinboardruby
+  encoding: utf8mb4
+  collation: utf8mb4_polish_ci
 
 # Warning: The database defined as "test" will be erased and
 test:
   <<: *default
-  database: bulletinboard-ruby
+  database: bulletinboardruby
+  encoding: utf8mb4
+  collation: utf8mb4_polish_ci
 
 production:
   <<: *default
-  database: bulletinboard-ruby
+  database: bulletinboardruby
+  encoding: utf8mb4
+  collation: utf8mb4_polish_ci

@@ -1,0 +1,24 @@
+= stylesheet_link_tag 'auth'
+.container.fixed-container
+  .row.auth-container.mb-5.align-items-center
+    .col-md-6.h-100.d-flex.justify-content-center
+      = image_tag "undraw_secure_login_pdn4.svg", class: "w-100"
+    .col-md-6.h-100.p-5
+      - if flash[:error]
+        .alert.alert-danger = flash[:error]
+      h3 Login
+      = form_with model: @form, :url => action_login_path do |form|
+        .form-item.w-100
+          .form-input
+            = form.label :email
+            = form.text_field :email
+          .form-input
+            = form.label :password
+            = form.password_field :password
+          .form-input.d-flex.button-double.justify-content-end
+            = form.submit "Sign In", class: "btn post w-100"
+          .d-flex.justify-content-between.mt-4.align-items-center
+            .d-flex
+              h6.mb-0 Not a member?
+              = link_to "Sign Up", register_path , class:"primary-color"
+            = link_to "Forget Password", password_reset_mail_path

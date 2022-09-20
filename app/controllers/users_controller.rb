@@ -2,11 +2,15 @@ class UsersController < ApplicationController
   before_action :authorized_and_admin?, except: %i[change_password action_change_password show edit update]
   before_action :already_login?, only: %i[change_password action_change_password]
   def index
-    @users = UserService.getAllUserList(current_user_obj[:id], nil)
+    run User::Operation::UserList, user_id: current_user_obj[:id], params: nil do |result|
+      @users = result[:users]
+    end
   end
 
   def user_list
-    @users = UserService.getAllUserList(current_user_obj[:id], params)
+    run User::Operation::UserList, user_id: current_user_obj[:id], params: params do |result|
+      @users = result[:users]
+    end
 
     @slice_users = @users.slice(params[:start].to_i, params[:length].to_i)
 
@@ -22,22 +26,26 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = UserService.getUserById(params[:id]) or not_found
+    run User::Operation::Update::Present do |result|
+      @user = result[:user]
+    end
+
+    if result.failure?
+      not_found
+    end
   end
 
   def new
-    @user = User.new
+    run User::Operation::Create::Present
   end
 
   def create
-    @user = User.new(user_params)
-    @is_save = UserService.save(@user, current_user_obj.id)
-    if @is_save
+    run User::Operation::Create, current_user_id: current_user_obj.id do |result|
       flash[:notice] = Messages::CREATED_SUCCESS
-      redirect_to users_path
-    else
-      render :new, status: :unprocessable_entity
+      return redirect_to users_path
     end
+
+    render :new, status: :unprocessable_entity
   end
 
   def edit
@@ -45,36 +53,43 @@ class UsersController < ApplicationController
       redirect_to user_path(params[:id]) and return
     end
 
-    @user = UserService.getUserById(params[:id]) or not_found
-    @user_form = @user
-  end
+    run User::Operation::Update::Present do |result|
+      @user = result[:user]
+    end
 
-  def update
-    @user = UserService.getUserById(params[:id])
-    @user_form = UserService.getUserById(params[:id]) or not_found
-
-    @is_updated = if current_user_obj[:role] == Constants::ADMIN_ROLE
-                    UserService.update(@user_form, current_user_obj.id, user_params)
-                  else
-                    UserService.update(@user_form, current_user_obj.id, user_params.except(:role))
-                  end
-
-    if @is_updated
-      redirect_to @user, notice: Messages::UPDATED_SUCCESS
-    else
-      render :edit, status: :unprocessable_entity
+    if result.failure?
+      not_found
     end
   end
 
+  def update
+    run User::Operation::Update::Present do |result|
+      @user = result[:user]
+    end
+
+    if current_user_obj[:role] == Constants::ADMIN_ROLE
+      @user_params = user_params
+    else
+      @user_params = user_params.except(:role)
+    end
+
+    run User::Operation::Update, current_user_id: current_user_obj.id, user_params: @user_params do |result|
+      return redirect_to @user, notice: Messages::UPDATED_SUCCESS
+    end
+    render :edit, status: :unprocessable_entity
+  end
+
   def destroy
-    @user = UserService.getUserById(params[:id])
-    UserService.deleteUser(@user)
-    flash[:notice] = Messages::DELETED_SUCCESS
-    redirect_to users_path, status: :see_other
+    run User::Operation::Destroy do |_|
+      flash[:notice] = Messages::DELETED_SUCCESS
+      redirect_to users_path, status: :see_other
+    end
   end
 
   def download_csv
-    @users = UserService.getAllUserList(current_user_obj[:id], nil)
+    run User::Operation::UserList, user_id: current_user_obj[:id], params: nil do |result|
+      @users = result[:users]
+    end
     respond_to do |format|
       format.html
       format.csv { send_data @users.to_csv, filename: 'user_list.csv' }
@@ -97,17 +112,16 @@ class UsersController < ApplicationController
   end
 
   def change_password
-    @change_password_form = ChangePasswordForm.new(current_user_obj)
+    run User::Operation::ChangePassword::Present
   end
 
   def action_change_password
-    @change_password_form = ChangePasswordForm.new(current_user_obj)
-
-    if @change_password_form.submit(params[:change_password_form])
-      redirect_to users_path, notice: Messages::CHANGE_PASSWORD_SUCCESS
-    else
-      render :change_password
+    run User::Operation::ChangePassword, current_user_obj: current_user_obj do |result|
+      return redirect_to users_path, notice: Messages::CHANGE_PASSWORD_SUCCESS
     end
+    flash[:error] = result[:verify_old_password] if result.failure? && result[:verify_old_password].present?
+
+    render :change_password
   end
 
   private
@@ -121,8 +135,11 @@ class UsersController < ApplicationController
                              header_converters: :symbol) do |row|
         row = row.to_hash
         row[:role] = (row[:role].downcase == 'admin' ? '0' : '1')
-        @user = UserService.create(row.merge(created_by: current_user_id, updated_by: current_user_id))
-        raise @user.errors.objects.first.full_message unless @user.valid?
+
+        @parameters = row.merge(created_by: current_user_id, updated_by: current_user_id)
+        result = User::Operation::Import.call(params: @parameters)
+
+        raise result[:"contract.default"].errors.messages.values.first.first if result.failure?
       end
       redirect_to users_path, notice: Messages::UPLOAD_SUCCESS
     end
@@ -133,9 +150,5 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation, :role, :phone)
-  end
-
-  def user_edit_params
-    params.require(:user).permit(:name, :email, :role, :phone)
   end
 end

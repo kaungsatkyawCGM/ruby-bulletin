@@ -1,0 +1,104 @@
+- content_for :css do
+  = stylesheet_link_tag 'newsfeed'
+  = stylesheet_link_tag 'post_list'
+.container.mt-90
+  == render 'users/include/profile'
+  .grid.grid-3-6-3.mt-3
+    .grid-column
+      .widget-box
+        .quick-post
+          = form_with model: @form, url: create_user_post_path, method: :post do |form|
+            .quick-post-header.d-flex.align-items-center
+              .option-items.h-100.w-100
+                - if logged_in?
+                  .user-info.add-post-div.pt-0.m-3.d-flex.justify-content-between.align-items-center
+                    a.profile href="#"
+                      .profile-image-frame
+                    p.username.m-0
+                      b
+                        = current_user_obj.name
+                    = form.select(:public_flag, [["Public", true], ["Private", false]], {selected: "1"}, {class: 'form-select' })
+                = form.text_field :title, placeholder: "Enter your title", class: "title-box form-control h-100", id: "title-input"
+                - if @form.errors[:title].any?
+                  span.text-danger
+                    = @form.errors[:title][0]
+            .form-item.w-100
+              .form-textarea.position-relative.w-100.bg-white
+                = form.text_area :description, class: "form-control", placeholder: "What Are You Thinking!", id: "description-input"
+                - if @form.errors[:description].any?
+                  span.text-danger
+                    = @form.errors[:description][0]
+            .post-image.d-none
+              img#image_displayer src=""
+              input name="imageData" type="hidden" id="imageData" value=""
+              - if logged_in?
+                = form.file_field :image_data, id: "image_input", class: "d-none", accept: "image/*"
+              - else
+                input type="file" id="image_input" name="post_img" accept='image/*' class="d-none" disabled="disabled"
+            .quick-post-footer
+              label.quick-post-footer-actions for="image_input"
+                i.fa-solid.fa-camera-retro.me-2
+              - if logged_in? && (current_user_obj[:id] == @user.id)
+                .quick-post-footer-actions
+                  button.btn.cancel#btn-clear type="button" clear
+                  button.btn.post type="submit" post
+              - else
+                .quick-post-footer-actions
+                  button.btn.cancel#btn-clear type="button" disabled="disabled" clear
+                  button.btn.post disabled="disabled" post
+    .grid-column
+      .widget-box
+        .quick-post-header.search-box.d-flex.align-items-center
+          .option-items.h-100.w-100
+            = form_with model: @searchForm, url: user_posts_path, method: :get, class: "form-inline" do |form|
+              = form.text_field :search, class: "title-box form-control h-100", placeholder: "Search with post title", value: "#{params[:search]}"
+              .search-icon
+                button.border-0.w-100.h-100.bg-transparent type="submit"
+                  i.fa-solid.fa-magnifying-glass
+      - if @posts.empty?
+        h6 No Post To Display
+      - else
+        - @posts.each do |post|
+          .widget-box
+            .widget-box-settings
+              .post-settings-wrap.position-relative
+                - if logged_in? && (current_user_obj[:id] == @user.id)
+                  i.fa-solid.fa-ellipsis.dropdown-toggle role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"
+                  .dropdown-menu.dropdown-action-list aria-labelledby="dropdownMenuLink"
+                    p
+                      = link_to "Edit Post", edit_post_path(post.post_id)
+                    p#delete-button
+                      a#deletePost data-bs-toggle="modal" data-bs-target="#deletePostModal#{post.post_id}"
+                        | Delete Post
+            .widget-box-status
+              .widget-box-status-content
+                .user-info.pe-4
+                  = link_to(user_path(post.user), class: "profile") do
+                    .profile-image-frame
+                  = link_to(user_path(post.user)) do
+                    p.username.m-0
+                      b
+                        = post.user.name
+                  p.mt-2.mb-0.upload-time
+                    = post.created_at.strftime("%Y/%m/%d %I:%M:%S %p " )
+                .widget-box-content-text.mt-3
+                  p
+                    = post.title
+                  p
+                    =raw post.description
+                - if post.image_data.attached?
+                  .w-100.mt-3
+                    .image-frame
+                      img.w-100.h-100 src=(url_for(post.image_data))
+          <!-- Modal -->
+          .modal.fade id="deletePostModal#{post.post_id}" tabindex="-1" aria-labelledby="deletePostModal" aria-hidden="true"
+            .modal-dialog.modal-dialog-centered
+              .modal-content
+                .modal-header
+                  h5.modal-title#exampleModalLabel | Delete Post
+                  button.btn-close type="button" data-bs-dismiss="modal" aria-label="Close"
+                .modal-body Are You Sure To Delete?
+                .modal-footer.button-double
+                  button.btn.cancel type="button" data-bs-dismiss="modal" Close
+                  = form_with model: @searchForm, url: delete_post_path(@user.id, post.post_id), method: :delete do |form|
+                    button.btn.btn-danger type="submit" id="delete-post-btn" Delete

@@ -1,0 +1,29 @@
+.navbar.navbar-expand-lg.navbar-light.bg-light
+  .container
+    = link_to "BULLETIN", posts_path, class: "navbar-brand text-light"
+    button.navbar-toggler type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+      span.navbar-toggler-icon
+    .collapse.navbar-collapse#navbarSupportedContent
+      ul.navbar-nav.me-auto.mb-2.mb-lg-0
+        li.nav-item
+          = link_to "Newsfeed", posts_path, class: "nav-link active"
+        - if current_user_obj.present? && current_user_obj[:role] == Constants::ADMIN_ROLE
+          li.nav-item
+            = link_to "Users", users_path, class: "nav-link"
+      - if logged_in?
+        form.d-flex
+          .dropdown
+            a.nav-link.dropdown-toggle.nav-user.show.d-flex.align-items-center#nav-user data-bs-toggle="dropdown" role="button" aria-haspopup="false" aria-expanded="true"
+              span
+                = current_user_obj.name
+              .rounded-circle.thumb-profile.ms-2
+            ul.dropdown-menu.profile-menu aria-labelledby="dropdownMenuButton1"
+              li
+                = link_to "Profile", user_path(current_user_obj) , class:"dropdown-item me-3"
+              li
+                = link_to "Change Password", change_password_path, class: "dropdown-item me-3"
+              li
+                = link_to "Log Out", action_logout_path , class:"dropdown-item"
+      - else
+        div
+          = link_to "Login",login_path, class: "btn nav-button"

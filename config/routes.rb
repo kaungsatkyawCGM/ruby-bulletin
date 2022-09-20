@@ -24,11 +24,12 @@ Rails.application.routes.draw do
   get '/password-reset', to: 'auth#password_reset', as: 'password_reset'
   post '/password-reset', to: 'auth#action_password_reset', as: 'action_password_reset'
 
-  resources :posts, only: [:index, :edit]
+  resources :posts, only: [:index, :new]
   post '/posts', to: 'posts#create', as: 'create_post'
   delete '/profile/:id/post/:post_id', to: 'posts#destroy', as: 'delete_post'
 
   get '/profile/:id/posts', to: 'posts#profile_post', as: 'user_posts'
   post '/profile/:id/posts', to: 'posts#create', as: 'create_user_post'
-  post '/post/update/:post_id', to: 'posts#update', as: 'update_post'
+  get '/post/:post_id/edit', to: 'posts#edit', as: 'edit_post'
+  post '/post/:post_id/edit', to: 'posts#update', as: 'update_post'
 end

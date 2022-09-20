@@ -1,0 +1,21 @@
+.profile-header.mt-5
+  figure.profile-header-cover.mb-0
+  .profile-header-info
+    .user-short-description.pb-3
+      a.user-short-description-avatar.user-avatar.big.d-flex.justify-content-center.align-items-center
+        .clip-block
+          .clip-each.clip-solid
+      p.user-short-description-title
+        = @user.name
+      p.user-short-description-text
+        = @user.email
+nav.section-navigation
+  .row.h-100
+    - about_active = (current_page?(user_path(@user)) ? "active" : "")
+    - post_active = (controller.controller_name == "posts" && (controller.action_name == "profile_post" || controller.action_name == "create") ? "active" : "")
+    - setting_active = (controller.controller_name == "users" && (controller.action_name == "edit" || controller.action_name == "update") ? "active" : "")
+    - column_class = (logged_in? && (current_user_obj[:id] == @user.id || current_user_obj[:role] == "1") ? "col-4" : "col-6")
+    = link_to "POSTS", user_posts_path(@user), class: "#{post_active} #{column_class} section-menu-item text-center position-relative d-flex align-items-center justify-content-center"
+    = link_to "ABOUT", user_path(@user), class: "#{about_active} #{column_class} section-menu-item text-center position-relative d-flex align-items-center justify-content-center"
+    - if logged_in? && (current_user_obj[:id] == @user.id || current_user_obj[:role] == "1")
+      = link_to "SETTING", edit_user_path(@user), class: "#{setting_active} col-4 section-menu-item text-center position-relative d-flex align-items-center justify-content-center"

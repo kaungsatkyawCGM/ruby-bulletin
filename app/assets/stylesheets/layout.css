@@ -272,6 +272,16 @@ table.table-bordered.dataTable th, table.table-bordered.dataTable td {
 	background: transparent !important;
 }
 
+/* tinymce */
+.tox-tinymce {
+  height: 300px !important;
+  border: none !important;
+}
+
+.tox-statusbar {
+  display: none !important;
+}
+
 @media (min-width: 768px) {
 	.fixed-container {
 		padding-top: 0;

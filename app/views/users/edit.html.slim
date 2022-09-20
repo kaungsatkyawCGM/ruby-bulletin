@@ -1,0 +1,45 @@
+.container.mt-90
+  == render 'users/include/profile'
+  section.p-5.mt-3.rounded-section
+    = form_with model: @form, url: updated_user_path(@form), method: :post do |form|
+      .d-flex.justify-content-center
+        div
+          .d-flex.justify-content-between.align-items-center
+            p.section-title.text-center.mb-0
+              | Change Personal Info
+            button.btn-update type="submit" Update
+          .form-row.d-flex.w-100
+            .form-item.w-100
+              .form-input
+                = form.label "Username"
+                = form.text_field :name
+                - if @form.errors[:name].any?
+                  span.text-danger
+                    = @form.errors[:name][0]
+          .form-row.d-flex.w-100
+            .form-item
+              .form-input
+                = form.label "Email"
+                = form.text_field :email
+                - if @form.errors[:email].any?
+                  span.text-danger
+                    = @form.errors[:email][0]
+            .form-item
+              .form-input
+                = form.label "Phone"
+                = form.text_field :phone
+                - if @form.errors[:phone].any?
+                  spa.text-danger
+                    = @form.errors[:phone][0]
+          - if current_user_obj[:role] == Constants::ADMIN_ROLE
+            .form-row.d-flex.w-100.mt-4
+              .form-item
+                .checkbox-wrap
+                  = form.radio_button :role, "0", checked: "checked", id: "admin"
+                  .checkbox-box.round
+                  label for="admin" Regular user
+              .form-item
+                .checkbox-wrap
+                  = form.radio_button :role, "1", id: "user"
+                  .checkbox-box.round
+                  label for="user" Administrator

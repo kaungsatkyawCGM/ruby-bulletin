@@ -18,6 +18,7 @@ module Messages
   POST_CREATED_SUCCESS = 'Post has been created'
   POST_UPDATED_SUCCESS = 'Post has been updated'
   POST_DELETED_SUCCESS = 'Post has been deleted'
+  POST_DELETED_ERROR = 'SOMETHING WENT WRONG'
 
   # csv
   REQUIRE_FILE = 'Please select a csv file'

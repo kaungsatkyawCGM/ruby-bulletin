@@ -1,6 +1,9 @@
 class ApplicationController < ActionController::Base
   def current_user_obj
-    @current_user ||= UserService.getUserById(session[:user_id])
+    run User::Operation::CurrentUser, user_id: session[:user_id] do |result|
+      return result[:current_user]
+    end
+    return false
   end
 
   def logged_in?
@@ -12,7 +15,9 @@ class ApplicationController < ActionController::Base
   end
 
   def logged_in_as_admin?
-    @user = UserService.getAdminUser(session[:user_id])
+    run User::Operation::CurrentUser, user_id: session[:user_id], admin_flg: true do |result|
+      @user = result[:current_user]
+    end
 
     if @user.blank?
       false

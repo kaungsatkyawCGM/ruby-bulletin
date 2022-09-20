@@ -283,6 +283,14 @@ select[name="filter"] {
   width: 60px;
 }
 
+.add-button-div {
+  height: 50px;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #fff !important;
+}
+
 @media screen and (max-width: 1070px) {
   .grid.grid-3-6-3 {
     grid-template-areas: "content";

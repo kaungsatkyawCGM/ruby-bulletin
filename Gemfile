@@ -56,6 +56,16 @@ gem 'image_processing', '~> 1.12', '>= 1.12.1'
 
 gem 'mail', '~> 2.7'
 
+gem 'trailblazer-rails'
+
+gem 'slim'
+
+gem "reform"
+
+gem "reform-rails"
+
+gem 'activerecord-session_store'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
